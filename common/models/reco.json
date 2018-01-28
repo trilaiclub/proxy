@@ -1,0 +1,43 @@
+{
+  "name": "reco",
+  "plural": "recos",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "userId": {
+      "type": "string",
+      "required": true
+    },
+    "feedlyId": {
+      "type": "string",
+      "required": true
+    },
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "string",
+      "required": true
+    },
+    "sourceUrl": {
+      "type": "string",
+      "required": true
+    },
+    "urlToImage": {
+      "type": "string",
+      "required": true
+    },
+    "recoKeyword": {
+      "type": "string",
+      "required": true
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {}
+}

@@ -1,0 +1,24 @@
+{
+  "name": "feedlycom",
+  "plural": "feedlycoms",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "streamId": {
+      "type": "string"
+    },
+    "keyword": {
+      "type": "string"
+    },
+    "fields": {
+      "type": "string"
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {}
+}
