@@ -12,38 +12,11 @@ module.exports = function (Feedlycom) {
       var responseAllBoards = "";
       var responseSearchInFeed = "";
       var responseSearchInBoard = "";
-      //List all categories    
 
-      function callback1(error, response, body) {
-            responseAllFeeds = "";
-            if (!error && response.statusCode == 200) {
-                  var info = JSON.parse(body);
-                  responseAllFeeds = info;
-            }
-      }
-      function callback2(error, response, body) {
-            responseAllBoards = "";
-            if (!error && response.statusCode == 200) {
-                  var info = JSON.parse(body);
-                  responseAllBoards = info;
-            }
-      }
-      function callback3(error, response, body) {
-            responseSearchInFeed = "";
-            if (!error && response.statusCode == 200) {
-                  var info = JSON.parse(body);
-                  responseSearchInFeed = info;
-            }
-      }
-      function callback4(error, response, body) {
-            responseSearchInBoard = "";
-            if (!error && response.statusCode == 200) {
-                  var info = JSON.parse(body);
-                  responseSearchInBoard = info;
-            }
-      }
+      //List all categories
 
       Feedlycom.listAllFeedPipes = function (data, cb) {
+
             var optionAllFeeds= {
                   url: feedly + '/' + "categories",
                   headers: {
@@ -51,10 +24,17 @@ module.exports = function (Feedlycom) {
                   }
             };
 
-            request(optionAllFeeds, callback1);
-            var response = responseAllFeeds;
+            request(optionAllFeeds, function (error, response, body) {
+                if (!error && response.statusCode == 200) {
+                   var info = JSON.parse(body);
+                   responseAllFeeds = info;
+                } else {
+                   responseAllFeeds = error;
+                }
+
+                cb(null, responseAllFeeds);
+            });
             responseAllFeeds = "";
-            cb(null, response);
       }
 
       Feedlycom.remoteMethod('listAllFeedPipes', {
@@ -66,6 +46,7 @@ module.exports = function (Feedlycom) {
       //List all boards
 
       Feedlycom.listAllBoardPipes = function (data, cb) {
+
             var optionAllBoards = {
                   url: feedly + '/' + "search/feeds?query=" + data + "",
                   headers: {
@@ -73,10 +54,19 @@ module.exports = function (Feedlycom) {
                   }
             };
 
-            request(optionAllBoards, callback2);
-            var response = responseAllBoards;
+            request(optionAllBoards, function (error, response, body) {
+
+               if (!error && response.statusCode == 200) {
+                  var info = JSON.parse(body);
+                  responseAllBoards = info;
+               } else {
+                 responseAllBoards = error;
+               }
+
+               cb(null, responseAllBoards);
+            });
+
             responseAllBoards = "";
-            cb(null, response);
       }
 
       Feedlycom.remoteMethod('listAllBoardPipes', {
@@ -89,6 +79,7 @@ module.exports = function (Feedlycom) {
       //Search in category feed
 
       Feedlycom.searchInFeedPipe = function (streamId, query, fields, cb) {
+
             var optionSearchInFeed = {
                   url: feedly + '/' + "search/contents?streamId=" + streamId + "&query=" + query + "&fields=" + fields + "",
                   headers: {
@@ -96,10 +87,18 @@ module.exports = function (Feedlycom) {
                   }
             };
 
-            request(optionSearchInFeed, callback3);
-            var response = responseSearchInFeed;
+            request(optionSearchInFeed, function (error, response, body) {
+
+                if (!error && response.statusCode == 200) {
+                   var info = JSON.parse(body);
+                   responseSearchInFeed = info;
+                } else {
+                   responseSearchInFeed = error;
+                }
+                cb(null, response);
+            });
+
             responseSearchInFeed = "";
-            cb(null, response);
       }
 
       Feedlycom.remoteMethod('searchInFeedPipe', {
@@ -125,10 +124,20 @@ module.exports = function (Feedlycom) {
                   }
             };
 
-            request(optionSearchInBoard, callback4);
-            var response = responseSearchInBoard;
+            request(optionSearchInBoard, function (error, response, body) {
+
+               if (!error && response.statusCode == 200) {
+                   var info = JSON.parse(body);
+                   responseSearchInBoard = info;
+               } else {
+                  responseSearchInBoard = error;
+               }
+
+               cb(null, response);
+            });
+
             responseSearchInBoard = "";
-            cb(null, response);
+
       }
 
       Feedlycom.remoteMethod('searchInBoardPipe', {
