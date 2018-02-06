@@ -1,0 +1,9 @@
+{
+  "feedlycom": {
+    "client": {
+      "url": "http://cloud.feedly.com/v3",
+      "authUrl": "http://cloud.feedly.com/v3/profile",
+      "secret": "OAuth   A3ibksO6sg-RUSkBJN9OoDOuP3BhuceOYJeDxhlakpi63tmoRg1kvWDV3zNE2o1PACMet5s6R3Bqsjef8qaYQPx_1XnFMMIph1c5lW2MIcxUlkf4Qv4TWDWy51dWmsXE_7WHlKi56YvW47UoNMBEcEaQ1Sj3b-cu6pgG3w887itvgVodN7mS-SosOCNW9xxVhRcaEEPdO8JJlElPaKFDMVgIwgV4bzU0jE6fIxv_YkjV0II1DlzhLKIFFIWiSw:feedlydev"
+    }
+  }
+}

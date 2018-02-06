@@ -3,6 +3,7 @@
 //Config
 var configJson = process.cwd() + '/' + "config.json";
 var config = require(configJson);
+var striptags = require('striptags');
 var request = require('request');
 
 module.exports = function (Feedlycom) {
@@ -12,6 +13,47 @@ module.exports = function (Feedlycom) {
       var responseAllBoards = "";
       var responseSearchInFeed = "";
       var responseSearchInBoard = "";
+
+      //Private Methods
+
+      Feedlycom.consolidate = function(body) {
+
+        var list = [];
+
+        for(var iIndex = 0; iIndex < body.items.length; iIndex++ ) {
+
+           list.push(Feedlycom.addItem(body.items[iIndex]));
+        }
+
+        return list;
+      }
+
+      Feedlycom.addItem = function(obj) {
+
+          var imgUrl = '';
+
+          if('thumbnail' in obj)
+              imgUrl = (obj.thumbnail.length > 0) ? obj.thumbnail[0].url : null;
+
+          var content = 'Nothing available';
+
+          if('summary' in obj)
+          if('content' in obj.summary)
+            content = obj.summary.content;
+
+          var result = {
+                           "id": obj.id,
+                           "title": striptags(obj.title),
+                           "description": striptags(content),
+                           "sourceurl": obj.canonicalUrl,
+                           "urltoimage": imgUrl
+                         };
+
+          return result;
+      }
+
+
+      //Remote Methods
 
       //List all categories
 
@@ -89,13 +131,21 @@ module.exports = function (Feedlycom) {
 
             request(optionSearchInFeed, function (error, response, body) {
 
+                var list = [];
                 if (!error && response.statusCode == 200) {
                    var info = JSON.parse(body);
                    responseSearchInFeed = info;
+                   list = Feedlycom.consolidate(responseSearchInFeed);
+                   //console.log(responseSearchInFeed); //debug
                 } else {
-                   responseSearchInFeed = error;
+                   responseSearchInFeed = body;
+                   if(responseSearchInFeed == undefined) responseSearchInFeed = error;
+                   //console.log(responseSearchInFeed);
+                   var err = JSON.parse(responseSearchInFeed);
+                   err.description = "Your trial version account " + err.errorMessage;
+                   list.push(err);
                 }
-                cb(null, response);
+                cb(null, list);
             });
 
             responseSearchInFeed = "";
@@ -108,7 +158,7 @@ module.exports = function (Feedlycom) {
                   { arg: 'query', type: 'string' },
                   { arg: 'fields', type: 'string' }
             ],
-            returns: { arg: 'response', type: 'object', 'http': { source: 'object' } }
+            returns: { arg: 'response', type: 'array', 'http': { source: 'array' } }
       });
 
 
