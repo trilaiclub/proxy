@@ -122,6 +122,8 @@ module.exports = function (Feedlycom) {
 
       Feedlycom.searchInFeedPipe = function (streamId, query, fields, cb) {
 
+            //console.log(streamId); //debug
+
             var optionSearchInFeed = {
                   url: feedly + '/' + "search/contents?streamId=" + streamId + "&query=" + query + "&fields=" + fields + "",
                   headers: {
@@ -132,18 +134,23 @@ module.exports = function (Feedlycom) {
             request(optionSearchInFeed, function (error, response, body) {
 
                 var list = [];
+                //console.log(streamId); //debug
+                //console.log(body); //debug
                 if (!error && response.statusCode == 200) {
                    var info = JSON.parse(body);
                    responseSearchInFeed = info;
                    list = Feedlycom.consolidate(responseSearchInFeed);
                    //console.log(responseSearchInFeed); //debug
                 } else {
+                   //console.log("body=>" + error); //debug
                    responseSearchInFeed = body;
                    if(responseSearchInFeed == undefined) responseSearchInFeed = error;
-                   //console.log(responseSearchInFeed);
-                   var err = JSON.parse(responseSearchInFeed);
-                   err.description = "Your trial version account " + err.errorMessage;
-                   list.push(err);
+                   //console.log("----" +responseSearchInFeed);
+                   if(responseSearchInFeed.length > 0) {
+                     var err = JSON.parse(responseSearchInFeed);
+                     err.description = "Your trial version account " + err.errorMessage;
+                     list.push(err);
+                   }
                 }
                 cb(null, list);
             });
